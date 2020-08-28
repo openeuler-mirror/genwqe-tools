@@ -10,7 +10,7 @@ BuildRequires:       libcxl-devel
 %endif
 Source0:             https://github.com/ibm-genwqe/genwqe-user/archive/v%{version}.tar.gz#/genwqe-user-%{version}.tar.gz
 Patch0:              genwqe-user-4.0.18-install-gzFile_test.patch
-Patch1:              genwqe-user-4.0.18-install-gzFile_test1.patch
+Patch1:              genwqe-user-4.0.18-modifyFuntionName.patch
 Requires:            genwqe-zlib = %{version}-%{release}
 %description
 Provide a suite of utilities to manage and configure the IBM GenWQE card.
