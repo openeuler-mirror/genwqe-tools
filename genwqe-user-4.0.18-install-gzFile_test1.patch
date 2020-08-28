@@ -1,0 +1,120 @@
+diff -Nur genwqe-user-4.0.20.old/lib/card_defs.h genwqe-user-4.0.20/lib/card_defs.h
+--- genwqe-user-4.0.20.old/lib/card_defs.h	2020-08-10 15:16:15.910249128 +0800
++++ genwqe-user-4.0.20/lib/card_defs.h	2020-08-10 15:39:51.694537978 +0800
+@@ -32,19 +32,19 @@
+ #include <unistd.h>
+ #include <sys/syscall.h>   /* For SYS_xxx definitions */
+ 
+-static inline pid_t gettid(void)
++static inline pid_t defs_gettid(void)
+ {
+ 	return (pid_t)syscall(SYS_gettid);
+ }
+ 
+ #define pr_err(fmt, ...)						\
+ 	fprintf(stderr, "%08x.%08x %s:%u: Error: " fmt,			\
+-		getpid(), gettid(), __FILE__, __LINE__, ## __VA_ARGS__)
++		getpid(), defs_gettid(), __FILE__, __LINE__, ## __VA_ARGS__)
+ 
+ #define pr_warn(fmt, ...) do {						\
+ 		if (_dbg_flag)						\
+ 			fprintf(stderr, "%08x.%08x %s:%u: Warn: " fmt,	\
+-				getpid(), gettid(), __FILE__, __LINE__,	\
++				getpid(), defs_gettid(), __FILE__, __LINE__,	\
+ 				## __VA_ARGS__);			\
+ 	} while (0)
+ 
+@@ -56,7 +56,7 @@
+ #define	pr_info(fmt, ...) do {						\
+ 		if (_dbg_flag)						\
+ 			fprintf(stderr, "%08x.%08x %s:%u: Info: " fmt,	\
+-				getpid(), gettid(), __FILE__, __LINE__,	\
++				getpid(), defs_gettid(), __FILE__, __LINE__,	\
+ 				## __VA_ARGS__);			\
+ 	} while (0)
+ 
+diff -Nur genwqe-user-4.0.20.old/lib/hw_defs.h genwqe-user-4.0.20/lib/hw_defs.h
+--- genwqe-user-4.0.20.old/lib/hw_defs.h	2020-08-10 15:16:15.910249128 +0800
++++ genwqe-user-4.0.20/lib/hw_defs.h	2020-08-10 15:27:57.120603187 +0800
+@@ -33,7 +33,7 @@
+ #  define ABS(a)	 (((a) < 0) ? -(a) : (a))
+ #endif
+ 
+-static inline pid_t gettid(void)
++static inline pid_t defs_gettid(void)
+ {
+ 	return (pid_t)syscall(SYS_gettid);
+ }
+@@ -44,14 +44,14 @@
+ #define pr_err(fmt, ...) do {						\
+ 		if (zedc_log)						\
+ 			fprintf(zedc_log, "%08x.%08x %s:%u: Error: " fmt, \
+-				getpid(), gettid(), __FILE__, __LINE__,	\
++				getpid(), defs_gettid(), __FILE__, __LINE__,	\
+ 				## __VA_ARGS__);			\
+ 	} while (0)
+ 
+ #define pr_warn(fmt, ...) do {						\
+ 		if (zedc_log)						\
+ 			fprintf(zedc_log, "%08x.%08x %s:%u: Warn: " fmt, \
+-				getpid(), gettid(), __FILE__, __LINE__,	\
++				getpid(), defs_gettid(), __FILE__, __LINE__,	\
+ 				## __VA_ARGS__);			\
+ 	} while (0)
+ 
+@@ -63,14 +63,14 @@
+ #define	pr_info(fmt, ...) do {						\
+ 		if (zedc_log && zedc_dbg)				\
+ 			fprintf(zedc_log, "%08x.%08x %s:%u: Info: " fmt, \
+-				getpid(), gettid(), __FILE__, __LINE__,	\
++				getpid(), defs_gettid(), __FILE__, __LINE__,	\
+ 				## __VA_ARGS__);			\
+ 	} while (0)
+ 
+ #define	pr_log(dbg, fmt, ...) do {					\
+ 		if (zedc_log && (dbg))					\
+ 			fprintf(zedc_log, "%08x.%08x %s:%u: Info: " fmt, \
+-				getpid(), gettid(), __FILE__, __LINE__,	\
++				getpid(), defs_gettid(), __FILE__, __LINE__,	\
+ 				## __VA_ARGS__);			\
+ 	} while (0)
+ 
+diff -Nur genwqe-user-4.0.20.old/tools/zlib_mt_perf.c genwqe-user-4.0.20/tools/zlib_mt_perf.c
+--- genwqe-user-4.0.20.old/tools/zlib_mt_perf.c	2020-08-10 15:16:15.914249188 +0800
++++ genwqe-user-4.0.20/tools/zlib_mt_perf.c	2020-08-10 15:43:40.897769361 +0800
+@@ -162,7 +162,7 @@
+ 	return run_cpu;
+ }
+ 
+-static pid_t gettid(void)
++static pid_t perf_gettid(void)
+ {
+ 	return (pid_t)syscall(SYS_gettid);
+ }
+@@ -492,7 +492,7 @@
+ 	d->defl_total=0;
+ 	d->defl_time=0;
+ 	d->comp_calls=0;
+-	d->tid = gettid();
++	d->tid = perf_gettid();
+ 	d->cpu = sched_getcpu();
+ 	d->first_run = true;
+ 	d->checksum = 0;
+@@ -533,7 +533,7 @@
+ 	d->infl_total = 0;
+ 	d->infl_time = 0;
+ 	d->decomp_calls = 0;
+-	d->tid = gettid();
++	d->tid = perf_gettid();
+ 	d->cpu = sched_getcpu();
+ 	d->first_run = true;
+ 	d->checksum = 0;
+@@ -550,7 +550,7 @@
+ 		rc = infl(d, c_fp);
+ 		if (rc != Z_OK) {
+ 			fprintf(stderr, "%08x.%08x err/inf: rc=%d %s\n",
+-				getpid(), gettid(), rc,	c_fname);
++				getpid(), perf_gettid(), rc,	c_fname);
+ 			zerr(rc);
+ 			goto exit_failure;
+ 		}
