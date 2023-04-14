@@ -1,0 +1,33 @@
+diff -up genwqe-user-4.0.20/config.mk.orig2 genwqe-user-4.0.20/config.mk
+--- genwqe-user-4.0.20/config.mk.orig2	2023-04-21 10:34:13.040174041 +0800
++++ genwqe-user-4.0.20/config.mk	2023-04-21 10:35:05.669606777 +0800
+@@ -20,10 +20,10 @@
+ #   V=2 means full output
+ #
+ V		?= 1
+-CC		= $(CROSS)gcc
+-AS		= $(CROSS)as
+-LD		= $(CROSS)ld
+-AR		= $(CROSS)ar
++CC		?= $(CROSS)gcc
++AS		?= $(CROSS)as
++LD		?= $(CROSS)ld
++AR		?= $(CROSS)ar
+ RANLIB		= $(CROSS)ranlib
+ OBJCOPY		= $(CROSS)objcopy
+ OBJDUMP		= $(CROSS)objdump
+@@ -40,10 +40,10 @@ endif
+ ifeq ($(V),1)
+ MAKEFLAGS	+= --silent
+ MAKE		+= -s
+-CC		= printf "\t[CC]\t%s\n" `basename "$@"`; $(CROSS)gcc
+-AS		= printf "\t[AS]\t%s\n" `basename "$@"`; $(CROSS)as
+-AR		= printf "\t[AR]\t%s\n" `basename "$@"`; $(CROSS)ar
+-LD		= printf "\t[LD]\t%s\n" `basename "$@"`; $(CROSS)ld
++CC		:= printf "\t[CC]\t%s\n" `basename "$@"`; $(CC)
++AS		:= printf "\t[AS]\t%s\n" `basename "$@"`; $(AS)
++AR		:= printf "\t[AR]\t%s\n" `basename "$@"`; $(LD)
++LD		:= printf "\t[LD]\t%s\n" `basename "$@"`; $(AR)
+ OBJCOPY		= printf "\t[OBJCOPY]\t%s\n" `basename "$@"`; $(CROSS)objcopy
+ else
+ CLEAN		= echo -n
