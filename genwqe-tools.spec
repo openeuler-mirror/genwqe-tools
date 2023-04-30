@@ -1,7 +1,7 @@
 Summary:             GenWQE userspace tools
 Name:                genwqe-tools
 Version:             4.0.20
-Release:             1
+Release:             2
 License:             ASL 2.0
 URL:                 https://github.com/ibm-genwqe/genwqe-user/
 BuildRequires:       gcc zlib-devel >= 1.2.7 help2man
@@ -11,6 +11,7 @@ BuildRequires:       libcxl-devel
 Source0:             https://github.com/ibm-genwqe/genwqe-user/archive/v%{version}.tar.gz#/genwqe-user-%{version}.tar.gz
 Patch0:              genwqe-user-4.0.18-install-gzFile_test.patch
 Patch1:              genwqe-user-4.0.18-modifyFuntionName.patch
+Patch2:              support-specify-cc.patch
 Requires:            genwqe-zlib = %{version}-%{release}
 %description
 Provide a suite of utilities to manage and configure the IBM GenWQE card.
@@ -117,5 +118,8 @@ rmdir %{buildroot}%{_libdir}/genwqe/
 %{_libdir}/*.a
 
 %changelog
+* Fri Apr 14 2023 jammyjellyfish <jammyjellyfish255@outlook.com> - 4.0.20-2
+- Support specify CC
+
 * Thu Aug 13 2020 tuShenmei <tushenmei@huawei.com> - 4.0.20-1
 - package init
